@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .outer-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background-color: #6B7280;
+
+            display: flex;
+            justify-content: center;
+        }
+
+        .num-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            padding: 30px 20px;
+            border-radius: 8px;
+            text-align: center;
+            background-color: #ccc;
+
+            animation: fadeIn 0.5s ease-in;
+            display: none;
+        }
+
+        .num-container>p {
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .num-container>input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        .num-container>button {
+            width: 100%;
+            padding: 10px;
+            background: #2D89EF;
+            border: none;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        #secret {
+            position: absolute;
+            top: 65px;
+            width: 100vw;
+            padding: 20px;
+            height: calc(100vh - 65px);
+            background-color: #6B7280;
+            color: #ccc;
+            animation: fadeIn 1s ease-in;
+            /* 2s fade-in */
+            animation-delay: 0.3s;
+
+            animation: fadeIn 0.5s ease-in;
+        }
+
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- contact container -->
+    <div class="outer-container">
+        <!-- header -->
+        <header>
+            <!-- logo -->
+            <div class="icon">
+                <img src="./images/Capybara.png" alt="capybara">
+            </div>
+            <!-- icon -->
+            <div class="burger">
+                <div></div>
+                <div></div>
+                <div></div>
+
+                <!-- lists -->
+                <ul class="dropdown">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="chrome-dino.html">Dino</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </header>
+
+        <!-- phone number -->
+        <div class="num-container">
+            <p>Andai waktu bisa putar kembali: <br>
+                [Pris, minta kontak dong...] <br> <br>
+                Aku tukar dengan satu kejujuran.
+            </p>
+            <input type="number" id="number" placeholder="+62">
+            <button type="submit" id="submitBtn">Submit</button>
+        </div>
+
+        <!-- secret container -->
+        <div id="secret">
+            hello
+        </div>
+    </div>
+
+
+    <script>
+        const submitBtn = document.getElementById("submitBtn");
+        const numContainer = document.getElementsByClassName("num-container")[0];
+        const secret = document.getElementById("secret");
+        let identify = "";
+
+        fetch("/api/getcontents")
+        .then(response => response.json())
+        .then(data => {
+            console.log(data[0].identify);
+            identify = data[0].identify;
+
+            if(identify === 1) {
+                numContainer.style.display = "none";
+                secret.textContent = data[0].secret;
+                return
+            }
+        })
+        .catch(err => console.error(err.message))
+
+        submitBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            const ipt = document.getElementById("number").value;
+
+            if (!ipt) {
+                alert("input tidak boleh kosong!");
+                return
+            }
+
+
+            fetch("/api/numbers", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ value: ipt })
+            })
+                .then(res => {
+                    if (!res.ok) throw new error("Error: " + res.status);
+                    return res.json();
+                })
+                .then(data => {
+                    alert("submitted");
+                    numContainer.style.display = "none";
+                    secret.style.display = "block";
+
+                    // update identify
+                    fetch(`/api/contents/68ddfca72dd878cbfecd622e`, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            identify: 1,
+                        }),
+                    })
+                        .then(res => res.json())
+                        .then(data => console.log("Updated " + data.identify))
+                        .catch(err => console.error(err));
+
+                })
+                .catch(err => {
+                    console.error("Gagal: " + err);
+                })
+
+
+            fetch("/api/getcontents")
+                .then(response => response.json())
+                .then(data => {
+                    let secretText = data[0].secret;
+                    console.log(data[0].secret);
+                    secret.textContent = secretText;
+                    numContainer.style.display = "none";
+                    secret.style.display = "block";
+                })
+        })
+    </script>
+    <script src="./js/script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Countdown ke 31 Desember 2025</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #121212;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    flex-direction: column;
+  }
+  h1 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+  }
+  .countdown {
+    font-size: 1.5rem;
+    background: #1e1e1e;
+    padding: 20px 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  }
+</style>
+</head>
+<body>
+
+<div class="countdown" id="countdown">
+  Loading...
+</div>
+
+<script>
+function updateCountdown() {
+    const now = new Date();
+    const target = new Date("December 31, 2025 00:00:00");
+
+    const total = target - now; // selisih dalam ms
+    if (total <= 0) {
+        document.getElementById("countdown").innerHTML = "Selamat Tahun Baru 2026!";
+        clearInterval(timer);
+        return;
+    }
+
+    const days = Math.floor(total / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((total % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((total % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((total % (1000 * 60)) / 1000);
+
+    document.getElementById("countdown").innerHTML =
+        `${days} : ${hours} : ${minutes} : ${seconds} `;
+}
+
+// update tiap 1 detik
+updateCountdown(); // panggil langsung agar tidak delay 1 detik
+const timer = setInterval(updateCountdown, 1000);
+</script>
+
+</body>
+</html>

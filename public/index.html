@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu PKU</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <!-- logo -->
+            <div class="icon">
+                <img src="./images/Capybara.png" alt="capybara">
+            </div>
+            <!-- icon -->
+            <div class="burger">
+                <div></div>
+                <div></div>
+                <div></div>
+
+                <!-- lists -->
+                <ul class="dropdown">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="chrome-dino.html">Dino</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </header>
+
+        <!-- Title -->
+        <h3>Menu PKU Mantul!!!</h3>
+
+        <!-- main card -->
+        <div class="main">
+            <div>
+                <p>Cherry Lips</p>
+            </div>
+            <div>
+                <p>Badasss!!!</p>
+            </div>
+            <div>
+                <p>White Skirt</p>
+            </div>
+            <div>
+                <p>Capybaraaa</p>
+            </div>
+            <div>
+                <p>Chocolate</p>
+            </div>
+            <div>
+                <p>Claw Machine</p>
+            </div>
+        </div>
+
+        <!-- text content -->
+        <div class="content">
+            <div class="inner-content">
+
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/script.js"></script>
+    <script>
+        const cards = document.querySelectorAll(".main > div");
+        const content = document.querySelector(".content");
+        const innerContent = document.getElementsByClassName("inner-content")[0];
+
+
+        // Ambil data dari server
+        let serverData = [];
+
+        fetch('/api/getcontents')
+            .then(response => response.json())
+            .then(data => {
+                serverData = data[0].content; // simpan data dari server
+                console.log(data[0].content);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                serverData = ["Gagal load content"]; // fallback
+            });
+
+        cards.forEach((card, index) => {
+            card.addEventListener("click", () => {
+                console.log(innerContent);
+                
+                innerContent.textContent = serverData[index]
+                content.style.transform = "translateX(0)"
+            })
+        })
+
+        content.addEventListener("click", () => {
+            content.style.transform = "translateX(-100vw)"
+        })
+
+
+    </script>
+    
+</body>
+
+</html>
