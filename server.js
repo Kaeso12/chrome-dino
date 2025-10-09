@@ -46,15 +46,14 @@ const NumberModel = mongoose.model("Number", NumSchema);
 
 
 // Get Data
-app.get("/", async (req, res) => {
-  // res.send("Hello, MongoDB with Express!");
-  try {
-    const contents = await ContentModel.find();
-    res.json(contents);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-})
+// app.get("/", async (req, res) => {
+//   try {
+//     const contents = await ContentModel.find();
+//     res.json(contents);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// })
 
 app.get("/api/getnumbers", async (req, res) => {
   try {
