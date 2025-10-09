@@ -33,7 +33,6 @@
             border-radius: 8px;
             text-align: center;
             background-color: #ccc;
-
             animation: fadeIn 0.5s ease-in;
             /* display: none; */
         }
@@ -79,10 +78,8 @@
             height: calc(100vh - 65px);
             background-color: #6B7280;
             color: #ccc;
-            animation: fadeIn 1s ease-in;
+            display: none;
             /* 2s fade-in */
-            animation-delay: 0.3s;
-
             animation: fadeIn 0.5s ease-in;
         }
 
@@ -135,7 +132,6 @@
 
         <!-- secret container -->
         <div id="secret" class="countdown">
-            hello
         </div>
     </div>
 
@@ -154,8 +150,10 @@
                 identify = data[0].identify;
 
                 if (identify === 1) {
+                    console.log("identify " + 1)
                     numContainer.style.display = "none";
-                    secret.textContent = data[0].secret;
+                    secret.style.display = "block";
+                    updateCountdown();
                     return
                 }
             })
@@ -240,7 +238,7 @@
         }
 
         // update tiap 1 detik
-        updateCountdown(); // panggil langsung agar tidak delay 1 detik
+         // panggil langsung agar tidak delay 1 detik
         const timer = setInterval(updateCountdown, 1000);
 
     </script>
