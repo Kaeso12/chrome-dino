@@ -42,8 +42,18 @@ const NumSchema = new mongoose.Schema({
 });
 
 
+const viewSchema = new mongoose.Schema({
+  page: { type: String, unique: true },
+  viewers: { type: Number, default: 0 },
+  lastViewed: { type: Date, default: Date.now }
+},{
+  versionKey: false
+});
+
+
 const ContentModel = mongoose.model("Content", ConSchema);
 const NumberModel = mongoose.model("Number", NumSchema);
+const ViewSchema = mongoose.model("View", viewSchema);
 
 
 // Get Data
@@ -95,6 +105,29 @@ app.get("/api/getcontents", async (req, res) => {
 //     res.status(500).json({ error: err.message });
 //   }
 // });
+
+
+app.get("/view/", async (req, res) => {
+  
+  try {
+    const page = req.query.page || "default"
+
+    await ViewSchema.findOneAndUpdate (
+      { page },
+      { 
+        $inc: { viewers: 1 }, $set: { lastViewed: new Date() } 
+      },
+      { 
+        upsert: true, new: true 
+      }
+    );
+
+    res.sendStatus(204);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({error: "Terjadi kesalahan server"})
+  }
+})
 
 
 app.post("/api/contents", async (req, res) => {

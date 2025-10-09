@@ -134,7 +134,7 @@
         </div>
 
         <!-- secret container -->
-        <div id="secret">
+        <div id="secret" class="countdown">
             hello
         </div>
     </div>
@@ -146,19 +146,20 @@
         const secret = document.getElementById("secret");
         let identify = "";
 
-        fetch("/api/getcontents")
-        .then(response => response.json())
-        .then(data => {
-            console.log(data[0].identify);
-            identify = data[0].identify;
 
-            if(identify === 1) {
-                numContainer.style.display = "none";
-                secret.textContent = data[0].secret;
-                return
-            }
-        })
-        .catch(err => console.error(err.message))
+        fetch("/api/getcontents")
+            .then(response => response.json())
+            .then(data => {
+                console.log(data[0].identify);
+                identify = data[0].identify;
+
+                if (identify === 1) {
+                    numContainer.style.display = "none";
+                    secret.textContent = data[0].secret;
+                    return
+                }
+            })
+            .catch(err => console.error(err.message))
 
         submitBtn.addEventListener("click", (e) => {
             e.preventDefault();
@@ -216,6 +217,32 @@
                     secret.style.display = "block";
                 })
         })
+
+
+        function updateCountdown() {
+            const now = new Date();
+            const target = new Date("December 31, 2025 00:00:00");
+
+            const total = target - now; // selisih dalam ms
+            if (total <= 0) {
+                document.getElementsByClassName("countdown")[0].innerHTML = "";
+                clearInterval(timer);
+                return;
+            }
+
+            const days = Math.floor(total / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((total % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((total % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((total % (1000 * 60)) / 1000);
+
+            document.getElementsByClassName("countdown")[0].innerHTML =
+                `${days} days : ${hours} hours : ${minutes} minutes : ${seconds} second`;
+        }
+
+        // update tiap 1 detik
+        updateCountdown(); // panggil langsung agar tidak delay 1 detik
+        const timer = setInterval(updateCountdown, 1000);
+
     </script>
     <script src="./js/script.js"></script>
 </body>
