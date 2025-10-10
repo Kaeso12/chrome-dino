@@ -85,8 +85,6 @@
 
         cards.forEach((card, index) => {
             card.addEventListener("click", () => {
-                console.log(innerContent);
-                
                 innerContent.textContent = serverData[index]
                 content.style.transform = "translateX(0)"
             })

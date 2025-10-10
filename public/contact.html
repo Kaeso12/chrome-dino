@@ -33,6 +33,7 @@
             border-radius: 8px;
             text-align: center;
             background-color: #ccc;
+
             animation: fadeIn 0.5s ease-in;
             /* display: none; */
         }
@@ -120,6 +121,9 @@
             </div>
         </header>
 
+        <!-- title -->
+         <h3>Minta Kontak WA</h3>
+
         <!-- phone number -->
         <div class="num-container">
             <p>Andai waktu bisa putar kembali: <br>
@@ -150,7 +154,7 @@
                 identify = data[0].identify;
 
                 if (identify === 1) {
-                    console.log("identify " + 1)
+                    // console.log(identify)
                     numContainer.style.display = "none";
                     secret.style.display = "block";
                     updateCountdown();

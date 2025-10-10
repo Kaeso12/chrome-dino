@@ -13,7 +13,6 @@ if (window.innerWidth > 400) {
 }
 
 icon.addEventListener("click", ()=> {
-    console.log(123);
     window.location.href = "index.html";
 })
 
@@ -39,6 +38,7 @@ document.addEventListener("click", (e)=> {
         dropDown.classList.remove("show");
     }  
 })
+
 
 fetch(`/view?page=${pageName}`)
         .catch(err => console.error("Gagal kirim data viewer:", err));  

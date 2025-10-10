@@ -34,9 +34,10 @@ header {
 h3 {
     margin: 0px auto;
     margin-top: 65px;
-    width: 200px;
+    width: 80%;
     padding: 10px;
     text-align: center;
+    color: #fff;
 }
 
 .burger {

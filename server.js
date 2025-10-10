@@ -45,7 +45,7 @@ const NumSchema = new mongoose.Schema({
 const viewSchema = new mongoose.Schema({
   page: { type: String, unique: true },
   viewers: { type: Number, default: 0 },
-  lastViewed: { type: Date, default: Date.now }
+  lastViewed: { type: Date, default: Date.now },
 },{
   versionKey: false
 });
@@ -110,12 +110,12 @@ app.get("/api/getcontents", async (req, res) => {
 app.get("/view/", async (req, res) => {
   
   try {
-    const page = req.query.page || "default"
+    const page = req.query.page || "default";
 
     await ViewSchema.findOneAndUpdate (
       { page },
       { 
-        $inc: { viewers: 1 }, $set: { lastViewed: new Date() } 
+        $inc: { viewers: 1 }, $set: { lastViewed: new Date() }
       },
       { 
         upsert: true, new: true 
