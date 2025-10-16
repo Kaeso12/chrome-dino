@@ -78,12 +78,15 @@
             padding: 20px;
             height: calc(100vh - 65px);
             background-color: #6B7280;
-            color: #ccc;
+            color: #fff;
             display: none;
             /* 2s fade-in */
             animation: fadeIn 0.5s ease-in;
         }
 
+        h3 {
+            display: none;
+        }
 
         @keyframes fadeIn {
             from {
@@ -122,7 +125,7 @@
         </header>
 
         <!-- title -->
-         <h3>Minta Kontak WA</h3>
+         <h3 class="title">Minta Kontak WA</h3>
 
         <!-- phone number -->
         <div class="num-container">
@@ -159,6 +162,8 @@
                     secret.style.display = "block";
                     updateCountdown();
                     return
+                } else {
+                    document.getElementsByClassName("title")[0].style.display = "block";
                 }
             })
             .catch(err => console.error(err.message))
