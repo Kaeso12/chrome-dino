@@ -73,7 +73,7 @@
         // Ambil data dari server
         let serverData = [];
 
-        fetch('/api/getcontents')
+        fetch('http://localhost:5000/api/getcontents')
             .then(response => response.json())
             .then(data => {
                 serverData = data[0].content; // simpan data dari server
@@ -90,9 +90,12 @@
             })
         })
 
-        content.addEventListener("click", () => {
-            content.style.transform = "translateX(-100vw)"
-        })
+        
+        if(content !== null) {
+            content.addEventListener("click", () => {
+                content.style.transform = "translateX(-100vw)"
+            })
+        }
 
 
     </script>
