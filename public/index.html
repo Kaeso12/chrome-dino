@@ -73,7 +73,7 @@
         // Ambil data dari server
         let serverData = [];
 
-        fetch('http://localhost:5000/api/getcontents')
+        fetch('/api/getcontents')
             .then(response => response.json())
             .then(data => {
                 serverData = data[0].content; // simpan data dari server

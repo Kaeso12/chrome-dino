@@ -10,7 +10,7 @@ const pageName = path.split("/").pop().replace(".html", "") || "index";
 if (window.innerWidth > 400) {
     // Sembunyikan kalau bukan ponsel
     document.body.style.backgroundColor = "#fff";
-    document.body.textContent = "Lower screen only"
+    document.body.textContent = "Mobile screen only"
 }
 
 icon.addEventListener("click", ()=> {
@@ -41,5 +41,5 @@ document.addEventListener("click", (e)=> {
 })
 
 
-fetch(`http://localhost:5000/view?page=${pageName}`)
+fetch(`/view?page=${pageName}`)
         .catch(err => console.error("Gagal kirim data viewer:", err));  
