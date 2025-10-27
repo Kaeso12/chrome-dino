@@ -42,4 +42,5 @@ document.addEventListener("click", (e)=> {
 
 
 fetch(`/view?page=${pageName}`)
-        .catch(err => console.error("Gagal kirim data viewer:", err));  
+        .catch(err => console.error("Gagal kirim data viewer:", err));
+

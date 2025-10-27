@@ -150,7 +150,7 @@
         let identify = "";
 
 
-        fetch("/api/getcontents")
+        fetch("/api/getusers")
             .then(response => response.json())
             .then(data => {
                 console.log(data[0].identify);
@@ -195,7 +195,7 @@
                     secret.style.display = "block";
 
                     // update identify
-                    fetch(`/api/contents/68ddfca72dd878cbfecd622e`, {
+                    fetch(`/api/users/68fcfaa866c95f2afe2bb67e`, {
                         method: "PUT",
                         headers: {
                             "Content-Type": "application/json"

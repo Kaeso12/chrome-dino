@@ -34,6 +34,11 @@ const ConSchema = new mongoose.Schema({
   versionKey: false
 });
 
+const UserSchema = new mongoose.Schema({
+  username: {type: String, default: ""},
+  identify: Number
+})
+
 const NumSchema = new mongoose.Schema({
   value: Number
 },
@@ -45,13 +50,15 @@ const NumSchema = new mongoose.Schema({
 const viewSchema = new mongoose.Schema({
   page: { type: String, unique: true },
   viewers: { type: Number, default: 0 },
-  lastViewed: { type: Date, default: Date.now },
+  lastViewed: { type: [Date], default: ()=> [new Date()] },
+  lastDevices: {type: [String], default: []}
 },{
   versionKey: false
 });
 
 
 const ContentModel = mongoose.model("Content", ConSchema);
+const UserModel = mongoose.model("User", UserSchema);
 const NumberModel = mongoose.model("Number", NumSchema);
 const ViewSchema = mongoose.model("View", viewSchema);
 
@@ -84,6 +91,15 @@ app.get("/api/getcontents", async (req, res) => {
   }
 })
 
+app.get("/api/getusers", async (req, res) => {
+  try {
+    const users = await UserModel.find();
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({error: err.message});
+  }
+})
+
 // Get all users
 // app.get("/users", async (req, res) => {
 //   try {
@@ -106,16 +122,33 @@ app.get("/api/getcontents", async (req, res) => {
 //   }
 // });
 
+app.get("/api/views", async (req, res) => {
+  try {
+    const viewers = await ViewSchema.find();
+    res.json(viewers);
+  } catch (err) {
+    res.status(500).json({error: "Terjadi kesalahan"})
+  }
+})
 
 app.get("/view/", async (req, res) => {
   
   try {
     const page = req.query.page || "default";
+    const userAgent = req.headers['user-agent'];
+
+    let deviceType = "Desktop";
+    if (/mobile/i.test(userAgent)) deviceType = "Mobile";
+    else if (/tablet/i.test(userAgent)) deviceType = "Tablet";
 
     await ViewSchema.findOneAndUpdate (
       { page },
       { 
-        $inc: { viewers: 1 }, $set: { lastViewed: new Date() }
+        $inc: { viewers: 1 },
+        $push: {
+          lastViewed: new Date(Date.now() + 7 * 60 * 60 * 1000),
+          lastDevices: deviceType
+        },
       },
       { 
         upsert: true, new: true 
@@ -150,17 +183,16 @@ app.post("/api/numbers", async (req, res) => {
   }
 })
 
-
 // update content
-app.put("/api/contents/:id", async (req, res) => {
+app.put("/api/users/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    const updatedContent = await ContentModel.findByIdAndUpdate(
+    const updatedContent = await UserModel.findByIdAndUpdate(
       id,
       req.body,
       {new: true}
-    );4
+    );
 
     if (!updatedContent) {
       return res.status(404).json({ message: "Content not found" });
